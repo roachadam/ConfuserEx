@@ -153,6 +153,26 @@ namespace Confuser.Core {
 			return ret.ToString();
 		}
 
+        /// <summary>
+		///     Encoding the buffer to a string using specified charset.
+		/// </summary>
+		/// <param name="buff">The input buffer.</param>
+		/// <param name="wordSet">The wordSet.</param>
+		/// <returns>The encoded string.</returns>
+		public static string EncodeString(byte[] buff, string[] wordSet) {
+			int current = buff[0];
+			var ret = new StringBuilder();
+			for (int i = 1; i < buff.Length; i++) {
+				current = (current << 8) + buff[i];
+				while (current >= wordSet.Length) {
+					ret.Append(wordSet[current % wordSet.Length]);
+					current /= wordSet.Length;
+				}
+			}
+			if (current != 0)
+				ret.Append(wordSet[current % wordSet.Length]);
+			return ret.ToString();
+		}
 		/// <summary>
 		///     Returns a new string in which all occurrences of a specified string in
 		///     <paramref name="str" /><paramref name="str" /> are replaced with another specified string.

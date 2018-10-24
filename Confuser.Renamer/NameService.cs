@@ -116,7 +116,7 @@ namespace Confuser.Renamer {
 		}
 
 		public RenameMode GetRenameMode(object obj) {
-			return context.Annotations.Get(obj, RenameModeKey, RenameMode.Unicode);
+			return context.Annotations.Get(obj, RenameModeKey, RenameMode.Realistic);
 		}
 
 		public void SetRenameMode(object obj, RenameMode val) {
@@ -170,6 +170,9 @@ namespace Confuser.Renamer {
 					return Utils.EncodeString(hash, letterCharset);
 				case RenameMode.ASCII:
 					return Utils.EncodeString(hash, asciiCharset);
+                case RenameMode.Realistic:
+					return Utils.EncodeString(hash, realistic);
+
 				case RenameMode.Decodable:
 					IncrementNameId();
 					return "_" + Utils.EncodeString(hash, alphaNumCharset);
@@ -308,6 +311,8 @@ namespace Confuser.Renamer {
 		                                                   .SelectMany(ord => new[] { (char)('a' + ord), (char)('A' + ord) })
 		                                                   .Concat(Enumerable.Range(0, 10).Select(ord => (char)('0' + ord)))
 		                                                   .ToArray();
+
+        static readonly string[] realistic = Properties.Resources.RealisticNames.Split('\n');
 
 		// Especially chosen, just to mess with people.
 		// Inspired by: http://xkcd.com/1137/ :D

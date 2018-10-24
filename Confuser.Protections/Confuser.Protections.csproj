@@ -116,6 +116,26 @@
     <Compile Include="Resources\NormalMode.cs" />
     <Compile Include="Resources\REContext.cs" />
     <Compile Include="Resources\ResourceProtection.cs" />
+    <Compile Include="TypeScrambler\Analysis\Context\Methods\MemberRefAnalyzer.cs" />
+    <Compile Include="TypeScrambler\Analysis\Context\Methods\MethodContextAnalyzer.cs" />
+    <Compile Include="TypeScrambler\Analysis\Context\Methods\MethodDefAnalyzer.cs" />
+    <Compile Include="TypeScrambler\Analysis\Context\Methods\MethodSpecAnalyzer.cs" />
+    <Compile Include="TypeScrambler\Analysis\Context\Methods\TypeRefAnalyzer.cs" />
+    <Compile Include="TypeScrambler\Analysis\ScannedItem.cs" />
+    <Compile Include="TypeScrambler\Analysis\ScannedMethod.cs" />
+    <Compile Include="TypeScrambler\Analysis\ScannedType.cs" />
+    <Compile Include="TypeScrambler\AnalyzePhase.cs" />
+    <Compile Include="TypeScrambler\Rewrite\CallProxyFactory.cs" />
+    <Compile Include="TypeScrambler\Rewrite\IFactory.cs" />
+    <Compile Include="TypeScrambler\Rewrite\Instructions\InstructionRewriter.cs" />
+    <Compile Include="TypeScrambler\Rewrite\Instructions\MemberRefInstructionRewriter.cs" />
+    <Compile Include="TypeScrambler\Rewrite\Instructions\MethodDefInstructionRewriter.cs" />
+    <Compile Include="TypeScrambler\Rewrite\Instructions\TypeDefInstructionRewriter.cs" />
+    <Compile Include="TypeScrambler\Rewrite\Instructions\TypeRefInstructionRewriter.cs" />
+    <Compile Include="TypeScrambler\Rewrite\ObjectCreationFactory.cs" />
+    <Compile Include="TypeScrambler\ScramblePhase.cs" />
+    <Compile Include="TypeScrambler\TypeScrambleProtection.cs" />
+    <Compile Include="TypeScrambler\TypeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\ConfuserEx.snk">

@@ -6,6 +6,7 @@ namespace Confuser.Renamer {
 		Unicode = 0x1,
 		ASCII = 0x2,
 		Letters = 0x3,
+        Realistic = 0x4,
 
 		Decodable = 0x10,
 		Sequential = 0x11,
