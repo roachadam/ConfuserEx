@@ -73,6 +73,7 @@ namespace Confuser.Protections.Constants {
 
 				MethodDef cctor = context.CurrentModule.GlobalType.FindStaticConstructor();
 				cctor.Body.Instructions.Insert(0, Instruction.Create(OpCodes.Call, moduleCtx.InitMethod));
+
 				context.Annotations.Set(context.CurrentModule, ConstantProtection.ContextKey, moduleCtx);
 			}
 		}
