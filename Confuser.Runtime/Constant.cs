@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Text;
 
 namespace Confuser.Runtime {
@@ -39,18 +40,23 @@ namespace Confuser.Runtime {
 			b = Lzma.Decompress(o);
 		}
 
-		static T Get<T>(uint id) {
+		static T Get<T>(uint penis, uint id) {
+            id = id ^ penis;
 			id = (uint)Mutation.Placeholder((int)id);
+            
 			uint t = id >> 30;
 
 			T ret = default(T);
 			id &= 0x3fffffff;
 			id <<= 2;
 
+            
 			if (t == Mutation.KeyI0) {
 				int l = b[id++] | (b[id++] << 8) | (b[id++] << 16) | (b[id++] << 24);
+                
 				ret = (T)(object)string.Intern(Encoding.UTF8.GetString(b, (int)id, l));
 			}
+
 			// NOTE: Assume little-endian
 			else if (t == Mutation.KeyI1) {
 				var v = new T[1];

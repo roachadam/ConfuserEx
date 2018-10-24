@@ -20,12 +20,23 @@ namespace Confuser.Protections.Constants {
 		}
 
 		static void ReplaceNormal(MethodDef method, List<Tuple<Instruction, uint, IMethod>> instrs) {
+            var rand = new Random(new Guid().GetHashCode());
 			foreach (var instr in instrs) {
-				int i = method.Body.Instructions.IndexOf(instr.Item1);
-				instr.Item1.OpCode = OpCodes.Ldc_I4;
-				instr.Item1.Operand = (int)instr.Item2;
-				method.Body.Instructions.Insert(i + 1, Instruction.Create(OpCodes.Call, instr.Item3));
-			}
+                int i = method.Body.Instructions.IndexOf(instr.Item1);
+                int randomModifier = rand.Next(1000,9999);
+                int modifiedValueId = (int)instr.Item2 ^ randomModifier;
+                instr.Item1.OpCode = OpCodes.Ldc_I4;
+                instr.Item1.Operand = randomModifier;
+                method.Body.Instructions.Insert(i + 1, Instruction.Create(OpCodes.Nop));
+                method.Body.Instructions.Insert(i + 2, Instruction.Create(OpCodes.Ldc_I4, modifiedValueId));
+                method.Body.Instructions.Insert(i + 3, Instruction.Create(OpCodes.Call, instr.Item3));
+
+                //int i = method.Body.Instructions.IndexOf(instr.Item1);
+                //instr.Item1.OpCode = OpCodes.Ldc_I4;
+                //instr.Item1.Operand = (int)instr.Item2;
+                //method.Body.Instructions.Insert(i + 1, Instruction.Create(OpCodes.Nop));
+                //method.Body.Instructions.Insert(i + 2, Instruction.Create(OpCodes.Call, instr.Item3));
+            }
 		}
 
 		struct CFGContext {
@@ -208,7 +219,6 @@ namespace Confuser.Protections.Constants {
 					body.Instructions.Insert(targetIndex++, first = Instruction.Create(OpCodes.Ldloca, ctx.StateVariable));
 					body.Instructions.Insert(targetIndex++, Instruction.Create(OpCodes.Ldc_I4, (int)seed));
 					body.Instructions.Insert(targetIndex++, Instruction.Create(OpCodes.Call, ctx.Ctx.CfgCtxCtor));
-
 					ctx.StatesMap[key.ExitState] = exit;
 				}
 				else {
@@ -252,7 +262,6 @@ namespace Confuser.Protections.Constants {
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4_S, (sbyte)fl));
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4, (int)incr));
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, ctx.Ctx.CfgCtxNext));
-
 					return currentState.Get(getId);
 				}
 				// Scan for updated state
@@ -278,7 +287,6 @@ namespace Confuser.Protections.Constants {
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4_S, (sbyte)fl));
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4, (int)incr));
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, ctx.Ctx.CfgCtxNext));
-
 					i++;
 					if (i == stateIds.Length)
 						getValue = currentState.Get(getId);
@@ -298,7 +306,6 @@ namespace Confuser.Protections.Constants {
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Dup));
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4, (int)seed));
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, ctx.Ctx.CfgCtxCtor));
-
 					// Randomly get state
 					int updateId = ctx.Random.NextInt32(3);
 					uint targetValue = ctx.Random.NextUInt32();
@@ -311,7 +318,6 @@ namespace Confuser.Protections.Constants {
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4_S, (sbyte)fl));
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4, (int)incr));
 					body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, ctx.Ctx.CfgCtxNext));
-
 					return currentState.Get(getId);
 				}
 				else {
@@ -330,7 +336,6 @@ namespace Confuser.Protections.Constants {
 						body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4_S, (sbyte)fl));
 						body.Instructions.Insert(index++, Instruction.Create(OpCodes.Ldc_I4, (int)targetValue));
 						body.Instructions.Insert(index++, Instruction.Create(OpCodes.Call, ctx.Ctx.CfgCtxNext));
-
 						i++;
 						if (i == stateIds.Length)
 							getValue = targetState.Value.Get(getId);
@@ -420,7 +425,6 @@ namespace Confuser.Protections.Constants {
 					refEntry.Item1.Operand = (int)(refEntry.Item2 ^ value);
 					method.Body.Instructions.Insert(index++, Instruction.Create(OpCodes.Xor));
 					method.Body.Instructions.Insert(index, Instruction.Create(OpCodes.Call, refEntry.Item3));
-
 					if (i == blockRef.Value.Count - 1 && targetState == null) {
 						cfgCtx.StatesMap[key.ExitState] = currentState;
 					}
